@@ -26,9 +26,6 @@ public class gui_1 {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JLabel l = new JLabel("Java Swing Sucks This is Outdated as fuck");
-		l.setBounds(100,150,300,100);
-		frame.add(l);
 		frame.getContentPane().setLayout(null);
 		JButton btnNewButton = new JButton("Save Data");
 		btnNewButton.addActionListener(new ActionListener() {
