@@ -6,10 +6,17 @@ package com.roster;
 
 public class StudentRosterSystem {
 
+    public StudentRosterSystem() {
+        createAppPage();
+    }
+
     public static void main() {
         System.out.Println("Initializing Application!!");
-        ApplicationPage ap = new ApplicationPage();
-        ap.setVisible(true)
+        new StudentRosterSystem();
+    }
+
+    private void createAppPage() {
+        new ApplicationPage();
     }
 
 }
