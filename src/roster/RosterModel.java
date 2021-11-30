@@ -12,12 +12,13 @@ import com.opencsv.*;
 public class RosterModel {
 
     private DefaultTableModel model;
+    public JTable table;
 
-    public void loadData(File file) {
-        Uti
-
-
-
+    public JTable loadData(File file) {
+        Pair<Vector<String>, Vector<Vector<String>>> csv = Utils.readCSV(file);
+        model = new DefaultTableModel();
+        model.setDataVector(csv.getValue(), csv.getKey());
+        table = new JTable(model);
     }
 
 }

@@ -27,7 +27,7 @@ public class ApplicationPage {
     private JMenu fileMenu, aboutMenu;
     private JMenuBar menuBar;
     private JMenuItem loadRosterMenuItem, addAttendanceItem, saveItem, plotDataItem;
-    private Jtable rosterTable;
+    private JTable rosterTable;
 
 
 
@@ -79,11 +79,11 @@ public class ApplicationPage {
         int approved = fileChooser.showOpenDialog(frame);
         if ( approved == JFileChooser.APPROVE_OPTION ) {
             File rosterFile = filechooser.getSelectedFile();
-            String rosterPath = rosterFile.getPath();
             RosterModel rm = new RosterModel();
-            JTable table = rm.loadData(rosterFile, );
+            rosterTable = rm.loadData(rosterFile);
+            jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
+            jFrame.add(table, BorderLayout.CENTER);
         }
-
     }
 
     private void displayAbout() {
