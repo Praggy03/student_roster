@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AttendanceMatcher {
 
@@ -27,12 +29,14 @@ public class AttendanceMatcher {
         jButton.setBounds(jFrame.getWidth()/2 - 100, jFrame.getHeight()/2 - 25, 200, 50);
 
         // Below is some sample data:
-        List<Attendee> additionalAttendees = Arrays.asList(
+        List<Attendee> sampleAttendees = Arrays.asList(
                 new Attendee("Jane", "Doe", "jdoe", 5),
-                new Attendee("Pooja", "Kulkarni", "pkulk", 1)
+                new Attendee("Pooja", "Kulkarni", "pkulka", 1),
+                new Attendee("Pooja", "Kulkarni", "pkulka", 3),
+                new Attendee("Pooja", "Kulkarni", "pkulka", 4),
+                new Attendee("Jane", "Doe", "jdoe", 7)
         );
-
-        jButton.addActionListener(e -> getDialog(additionalAttendees, 50).setVisible(true));
+        jButton.addActionListener(e -> getDialog(mergeLoadedAttendees(sampleAttendees), 50).setVisible(true));
 
         jFrame.add(jButton);
     }
@@ -60,7 +64,7 @@ public class AttendanceMatcher {
                     .append("\n"));
         }
 
-        dialog.add( new JLabel (wrapInHtml(studentReport)));
+        dialog.add(new JLabel (wrapInHtml(studentReport)));
         dialog.setBounds(new Rectangle(400, 400, 500, 300));
         return dialog;
     }
@@ -76,6 +80,23 @@ public class AttendanceMatcher {
         text.insert(0, "<html><body><p>");
         text.append("</p></body></html>");
         return text.toString().replace("\n", "<br>");
+    }
+
+    private List<Attendee> mergeLoadedAttendees(List<Attendee> attendees) {
+        return attendees
+                .stream()
+                .collect(Collectors.toMap(
+                        Attendee::getAsuriteId,
+                        Function.identity(),
+                        (attendee1, attendee2) -> {
+                            Attendee mergedAttendee = attendee1.clone();
+                            mergedAttendee.setAttendanceMinutes(attendee1.getAttendanceMinutes() + attendee2.getAttendanceMinutes());
+                            return mergedAttendee;
+                        })
+                )
+                .values()
+                .stream()
+                .toList();
     }
 
 }
