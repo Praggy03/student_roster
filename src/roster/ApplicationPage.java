@@ -12,15 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 
 
-/**
- * @author Praggy03
-**/
-
 public class ApplicationPage {
 
-    /**
-     * Create new form for home
-    **/
     public static JFrame jFrame;
 
     private JTable table;

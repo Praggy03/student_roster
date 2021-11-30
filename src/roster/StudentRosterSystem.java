@@ -1,9 +1,5 @@
 package com.roster;
 
-/**
- * @author Praggy03
-**/
-
 public class StudentRosterSystem {
 
     public StudentRosterSystem() {
