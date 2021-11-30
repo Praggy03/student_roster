@@ -13,7 +13,7 @@ public class Utils {
     String[] headers;
 
 
-    public static Pair<Vector<String>, Vector<Vector<String>>>,  readCsv(File file) {
+    public static Pair<Vector<String>, Vector<Vector<String>>> readCsv(File file) {
         try {
             FileReader fileRead = new FileReader(file);
             BufferReader buffRead = new BufferReader(fr);
