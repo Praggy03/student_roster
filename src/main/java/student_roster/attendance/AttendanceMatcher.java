@@ -5,35 +5,28 @@ import student_roster.actor.Attendee;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class AttendanceMatcher {
-//    public static void main(String[] args) {
-//        // This should be done in the main GUI class later
-//        new AttendanceMatcher().matchAttendance();
-//    }
 
-    private void matchAttendance() {
-        JButton jButton = new JButton("Match attendance");
-        jButton.setBounds(ApplicationPage.jFrame.getWidth()/2 - 100, ApplicationPage.jFrame.getHeight()/2 - 25, 200, 50);
-
-        // Below is some sample data:
-        List<Attendee> sampleAttendees = Arrays.asList(
-                new Attendee("Jane", "Doe", "jdoe", 5),
-                new Attendee("Pooja", "Kulkarni", "pkulka", 1),
-                new Attendee("Pooja", "Kulkarni", "pkulka", 3),
-                new Attendee("Pooja", "Kulkarni", "pkulka", 4),
-                new Attendee("Jane", "Doe", "jdoe", 7)
-        );
-        jButton.addActionListener(e -> getDialog(mergeLoadedAttendees(sampleAttendees), 50).setVisible(true));
-
-        ApplicationPage.jFrame.add(jButton);
+    public void matchAttendance(List<Attendee> attendees, LocalDateTime date) {
+//        attendees = Arrays.asList(
+//                new Attendee("Jane", "Doe", "jdoe", 5),
+//                new Attendee("Pooja", "Kulkarni", "pkulka", 1),
+//                new Attendee("Pooja", "Kulkarni", "pkulka", 3),
+//                new Attendee("Pooja", "Kulkarni", "pkulka", 4),
+//                new Attendee("Jane", "Doe", "jdoe", 7)
+//        );
+        List<Attendee> mergedAttendees = mergeLoadedAttendees(attendees);
+        if(mergedAttendees != null && !mergedAttendees.isEmpty()) {
+            displayReportDialog(mergedAttendees, 50).setVisible(true);
+        }
     }
 
-    private JDialog getDialog(List<Attendee> additionalAttendees, int studentsLoaded) {
+    private JDialog displayReportDialog(List<Attendee> additionalAttendees, int studentsLoaded) {
         JDialog dialog = new JDialog(ApplicationPage.jFrame, "Matched attendance data!", true);
         dialog.setLayout(new FlowLayout());
         dialog.setVisible(false);
@@ -43,7 +36,7 @@ public class AttendanceMatcher {
                 .append(studentsLoaded)
                 .append(" students in the roster\n\n");
 
-        if(additionalAttendees != null && !additionalAttendees.isEmpty()) {
+        if (additionalAttendees != null && !additionalAttendees.isEmpty()) {
             studentReport.append(additionalAttendees.size()).append(" additional ")
                     .append(additionalAttendees.size() == 1 ? "attendee " : "attendees ")
                     .append(additionalAttendees.size() == 1 ? "was " : "were ")
@@ -57,8 +50,11 @@ public class AttendanceMatcher {
                     .append("\n"));
         }
 
-        dialog.add(new JLabel (wrapInHtml(studentReport)));
-        dialog.setBounds(new Rectangle(400, 400, 500, 300));
+        dialog.add(new JLabel(wrapInHtml(studentReport)));
+        dialog.setBounds(
+                new Rectangle(ApplicationPage.jFrame.getWidth()/2 - 250, ApplicationPage.jFrame.getHeight()/2 - 250, 500, 300)
+        );
+
         return dialog;
     }
 
