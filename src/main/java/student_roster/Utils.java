@@ -20,7 +20,7 @@ public class Utils {
 
             String row1 = buffRead.readLine().trim();
 
-            if row1 != null {
+            if (row1 != null) {
                 headers = row1.split(",");
                 vectorHeaders = new Vector<String>();
                 for(int i=0; i<headers.length;i++) {
