@@ -53,8 +53,9 @@ public class AttendanceMatcher {
 
         if(additionalAttendees != null && !additionalAttendees.isEmpty()) {
             studentReport.append(additionalAttendees.size()).append(" additional ")
-                    .append(additionalAttendees.size() == 1 ? "attendee" : "attendees")
-                    .append(" was found!\n\n");
+                    .append(additionalAttendees.size() == 1 ? "attendee " : "attendees ")
+                    .append(additionalAttendees.size() == 1 ? "was " : "were ")
+                    .append("found!\n\n");
 
             additionalAttendees.forEach(additionalAttendee -> studentReport
                     .append(additionalAttendee.getName())
