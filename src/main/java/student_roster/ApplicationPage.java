@@ -18,6 +18,7 @@ public class ApplicationPage {
     private JMenuBar menuBar;
     private JMenuItem loadRosterMenuItem, addAttendanceItem, saveItem, plotDataItem, teamInformation;
     private JTable rosterTable;
+    private JTable attendanceTable;
 
 
 
@@ -52,6 +53,7 @@ public class ApplicationPage {
 
         addAttendanceItem = new JMenuItem("Add Attendance");
         fileMenu.add(addAttendanceItem);
+        addAttendanceItem.addActionListener(e->loadAttendance());
 
         saveItem = new JMenuItem("Save");
         fileMenu.add(saveItem);
@@ -74,6 +76,28 @@ public class ApplicationPage {
             File rosterFile = chooser.getSelectedFile();
             RosterModel rm = new RosterModel();
             rosterTable = rm.loadData(rosterFile);
+            jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
+            jFrame.add(table, BorderLayout.CENTER);
+        }
+    }
+
+    private void loadAttendance() {
+
+        //DatePicker
+
+
+
+
+//        Loading the CSV File
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV files (*.csv)", "csv");
+        chooser.setFileFilter(fileFilter);
+        chooser.setMultiSelectionEnabled(false);
+        int approved = chooser.showOpenDialog(jFrame);
+        if ( approved == JFileChooser.APPROVE_OPTION ) {
+            File attendancefile = chooser.getSelectedFile();
+            AttendanceModel am = new AttendanceModel();
+            attendanceTable = am.loadData(attendancefile);
             jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
             jFrame.add(table, BorderLayout.CENTER);
         }
