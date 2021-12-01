@@ -1,4 +1,4 @@
-package com.roster;
+package student_roster;
 
 public class StudentRosterSystem {
 
@@ -6,8 +6,8 @@ public class StudentRosterSystem {
         createAppPage();
     }
 
-    public static void main() {
-        System.out.Println("Initializing Application!!");
+    public static void main(String args[]) {
+        System.out.println("Initializing Application!!");
         new StudentRosterSystem();
     }
 

@@ -1,0 +1,14 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.2'
+}
+
+apply plugin: 'application'
+mainClassName = 'student_roster.StudentRosterSystem'

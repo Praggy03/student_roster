@@ -1,6 +1,6 @@
-package src.roster.attendance;
+package student_roster.attendance;
 
-import src.roster.actor.Attendee;
+import student_roster.actor.Attendee;
 
 import javax.swing.*;
 import java.awt.*;
