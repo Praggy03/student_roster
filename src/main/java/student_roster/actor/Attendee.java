@@ -3,7 +3,9 @@ package student_roster.actor;
 public class Attendee extends Student implements Cloneable {
     private int attendanceMinutes;
 
-    public Attendee() { }
+    public Attendee() {
+        super();
+    }
 
     public Attendee(String firstName, String lastName, String asuriteId, int attendanceMinutes) {
         this.firstName = firstName;
@@ -23,10 +25,10 @@ public class Attendee extends Student implements Cloneable {
     @Override
     public Attendee clone() {
         try {
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
             return (Attendee) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
     }
+
 }
