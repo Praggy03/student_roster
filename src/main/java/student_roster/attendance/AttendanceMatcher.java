@@ -1,5 +1,6 @@
 package student_roster.attendance;
 
+import student_roster.ApplicationPage;
 import student_roster.actor.Attendee;
 
 import javax.swing.*;
@@ -10,23 +11,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class AttendanceMatcher {
+//    public static void main(String[] args) {
+//        // This should be done in the main GUI class later
+//        new AttendanceMatcher().matchAttendance();
+//    }
 
-    private static JFrame jFrame;
-
-    public static void main(String[] args) {
-        // This should be done in the main GUI class later
-        new AttendanceMatcher().matchAttendance();
-    }
-
-    public void matchAttendance() {
-        loadMatcherUI();
-    }
-
-    private void loadMatcherUI() {
-        // Below call is just for testing purposes and attendance matcher UI should later be integrated with main GUI
-        initializeFrame();
+    private void matchAttendance() {
         JButton jButton = new JButton("Match attendance");
-        jButton.setBounds(jFrame.getWidth()/2 - 100, jFrame.getHeight()/2 - 25, 200, 50);
+        jButton.setBounds(ApplicationPage.jFrame.getWidth()/2 - 100, ApplicationPage.jFrame.getHeight()/2 - 25, 200, 50);
 
         // Below is some sample data:
         List<Attendee> sampleAttendees = Arrays.asList(
@@ -38,11 +30,11 @@ public class AttendanceMatcher {
         );
         jButton.addActionListener(e -> getDialog(mergeLoadedAttendees(sampleAttendees), 50).setVisible(true));
 
-        jFrame.add(jButton);
+        ApplicationPage.jFrame.add(jButton);
     }
 
     private JDialog getDialog(List<Attendee> additionalAttendees, int studentsLoaded) {
-        JDialog dialog = new JDialog(jFrame, "Matched attendance data!", true);
+        JDialog dialog = new JDialog(ApplicationPage.jFrame, "Matched attendance data!", true);
         dialog.setLayout(new FlowLayout());
         dialog.setVisible(false);
 
@@ -68,13 +60,6 @@ public class AttendanceMatcher {
         dialog.add(new JLabel (wrapInHtml(studentReport)));
         dialog.setBounds(new Rectangle(400, 400, 500, 300));
         return dialog;
-    }
-
-    private void initializeFrame() {
-        jFrame = new JFrame();
-        jFrame.setBounds(new Rectangle(400, 400, 700, 500));
-        jFrame.setLayout(null);
-        jFrame.setVisible(true);
     }
 
     private String wrapInHtml(StringBuilder text) {
