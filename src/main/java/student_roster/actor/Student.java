@@ -1,4 +1,4 @@
-package src.roster.actor;
+package student_roster.actor;
 
 public class Student {
     protected String firstName;

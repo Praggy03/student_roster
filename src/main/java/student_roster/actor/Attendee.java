@@ -1,4 +1,4 @@
-package src.roster.actor;
+package student_roster.actor;
 
 public class Attendee extends Student implements Cloneable {
     private int attendanceMinutes;
