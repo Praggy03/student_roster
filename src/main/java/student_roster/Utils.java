@@ -1,22 +1,29 @@
-package com.roster;
+package student_roster;
 
 import java.io.*;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import com.opencsv.*;
 
 public class Utils {
 
     String row1;
-    Vector<Vector<String>> rowsData = new Vector<Vector<String>>();
-    Vector<String> vectorRows = new Vector<String>();
-    Vector<String> vectorHeaders = new Vector<String>();
+    List<List<String>> rowsData = new ArrayList<>();
+    List<String> vectorRows = new ArrayList<>();
+    List<String> vectorHeaders = new ArrayList<>();
     String[] headers;
 
+    class Result {
+        List<String> headers;
+        List<List<String>> data;
+    }
 
-    public static Pair<Vector<String>, Vector<Vector<String>>> readCsv(File file) {
+
+    public Result readCsv(File file) {
         try {
             FileReader fileRead = new FileReader(file);
-            BufferReader buffRead = new BufferReader(fr);
+            BufferedReader buffRead = new BufferedReader(fileRead);
 
             String row1 = buffRead.readLine().trim();
 
@@ -42,9 +49,13 @@ public class Utils {
         } catch (IOException io) {
             System.out.println("Error in input file:"+ io.getMessage());
         } catch (Exception e) {
-            System.out.pritln("Unknown error while reading input file"+e.getMessage());
+            System.out.println("Unknown error while reading input file"+e.getMessage());
         }
-        return new Pair<Vector<String>, Vector<Vector<String>>>(vectorHeaders, rowsData);
+        var r = new Result();
+        r.headers = vectorHeaders;
+        r.data = rowsData;
+
+        return r;
     }
 
 }
