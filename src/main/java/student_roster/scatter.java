@@ -1,21 +1,22 @@
-        import javax.swing.*;
-        import java.io.*;
-        import java.awt.*;
-        import java.awt.event.ActionListener;
-        import java.awt.event.ActionEvent;
-        import java.util.*;
-        import java.nio.*;
+import javax.swing.*;
+import java.io.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.*;
+import java.util.List;
+import java.nio.*;
 
-        import com.opencsv.CSVReader;
+import com.opencsv.CSVReader;
 
-        import org.jfree.chart.ui.*;
-        import org.jfree.chart.ChartFrame;
-        import org.jfree.chart.ChartFactory;
-        import org.jfree.chart.ChartUtilities;
-        import org.jfree.chart.JFreeChart;
-        import org.jfree.data.xy.XYSeries;
-        import org.jfree.data.xy.XYSeriesCollection;
-        import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.ui.*;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartFactory;
+//import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.chart.plot.PlotOrientation;
 
 
 public class scatter {
@@ -43,10 +44,10 @@ public class scatter {
         }
 
         System.out.println("Counter array is : "+Arrays.deepToString(counter));
-        return counter; //change
+        return counter;
     }
 
-
+    // Function which merges counts of each attendance percentage
     static Integer[][][] mergeCountArray(Integer[][][] a, int count, int columnLength){
         Integer finalArray[][][] = new Integer[columnLength-4][count][2];
 
@@ -74,17 +75,19 @@ public class scatter {
     public static void main(String[] args) {
 
         //CSV Reader
-        String path = "C:/Users/Abhinav/IdeaProjects/JAVAproject/src/RosterAttendance.csv";
+        String path = "src/RosterAttendance.csv";
         String line = "";
         String[] values = {};
 
+        List<List<String>> records = new ArrayList<>();
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             while ((line = br.readLine()) != null) {
                 values = line.split(",");
-                System.out.println(Arrays.deepToString(values));
+                records.add(Arrays.asList(values));
             }
+            System.out.println(records);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -118,6 +121,7 @@ public class scatter {
                         {"Martinez","CS","Grad","1522232332","20","42","21","68"},
                         {"Martinez","CS","Grad","1522232332","20","42","21","68"}
                 };
+
                 JTable jTable1 = new JTable(data, columns);
                 int count = data.length;
                 int columnLength = data[0].length;
@@ -220,7 +224,7 @@ public class scatter {
 
                 ChartFrame frame2= new ChartFrame("Plot Chart", scatterPlot);
                 frame2.setVisible(true);
-                frame2.setSize(650,650);
+                frame2.setSize(800, 400);
                 frame2.setTitle("Attendence Statistics - Scatter Plot");
                 frame2.setResizable(false);
                 frame2.setLocationRelativeTo(null);
