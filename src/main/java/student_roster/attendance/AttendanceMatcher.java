@@ -35,6 +35,11 @@ public class AttendanceMatcher {
     }
 
     private static AttendanceMatcher attendanceMatcher;
+    private List<Attendee> mergedAttendees;
+
+    public List<Attendee> getMergedAttendees() {
+        return this.mergedAttendees;
+    }
 
 
     /**
@@ -60,7 +65,7 @@ public class AttendanceMatcher {
      * @return a merged list
      */
     public List<Attendee> mergeLoadedAttendees(List<Attendee> attendees) {
-        return attendees
+        List<Attendee> mergedAttendees = attendees
                 .stream()
                 .collect(Collectors.toMap(
                         Attendee::getAsuriteId,
@@ -74,6 +79,8 @@ public class AttendanceMatcher {
                 .values()
                 .stream()
                 .toList();
+        this.mergedAttendees = mergedAttendees;
+        return mergedAttendees;
     }
 
 
