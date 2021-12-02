@@ -1,16 +1,16 @@
 package student_roster;
 
+import javax.swing.filechooser.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.JTable;
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
-
 import javax.swing.JOptionPane;
-
-
 import java.io.*;
 
-public class RosterModel {
+public class AttendanceModel {
+
 
     private DefaultTableModel model;
     public JTable table;

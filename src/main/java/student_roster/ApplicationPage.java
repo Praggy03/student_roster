@@ -3,8 +3,8 @@ package student_roster;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import java.awt.*;
 
+import java.awt.*;
 import java.io.File;
 
 
@@ -12,11 +12,13 @@ public class ApplicationPage {
 
     public static JFrame jFrame;
 
-    private JTable table;
     private JMenu fileMenu, aboutMenu;
     private JMenuBar menuBar;
     private JMenuItem loadRosterMenuItem, addAttendanceItem, saveItem, plotDataItem, teamInformation;
     private JTable rosterTable;
+    private JScrollPane tableScrollPane;
+    private JPanel tablePanel;
+    private JTable attendanceTable;
 
 
 
@@ -27,8 +29,9 @@ public class ApplicationPage {
 
     private void loadFrame() {
         jFrame = new JFrame();
-        jFrame.setSize(900,900);
+        jFrame.setSize(1440,1080);
         jFrame.setTitle("Student Roster Management");
+
     }
 
     private void createMenuBar() {
@@ -51,6 +54,7 @@ public class ApplicationPage {
 
         addAttendanceItem = new JMenuItem("Add Attendance");
         fileMenu.add(addAttendanceItem);
+        addAttendanceItem.addActionListener(e->loadAttendance());
 
         saveItem = new JMenuItem("Save");
         fileMenu.add(saveItem);
@@ -71,8 +75,39 @@ public class ApplicationPage {
         int approved = chooser.showOpenDialog(jFrame);
         if ( approved == JFileChooser.APPROVE_OPTION ) {
             File rosterFile = chooser.getSelectedFile();
-            RosterModel rm = new RosterModel();
+            Roster rm = new Roster();
             rosterTable = rm.loadData(rosterFile);
+            rosterTable.setSize(1440, 1080);
+            rosterTable.setGridColor(Color.BLACK);
+            rosterTable.setShowGrid(true);
+            tableScrollPane = new JScrollPane(rosterTable);
+            tableScrollPane.setVisible(true);
+            tableScrollPane.setSize(1440, 1080);
+            jFrame.add(tableScrollPane, BorderLayout.PAGE_START);
+            jFrame.setSize(0,0);
+            jFrame.setSize(1440,1080);
+            rosterTable.setVisible(true);
+
+        }
+    }
+
+    private void loadAttendance() {
+
+        //DatePicker
+
+
+
+
+//        Loading the CSV File
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV files (*.csv)", "csv");
+        chooser.setFileFilter(fileFilter);
+        chooser.setMultiSelectionEnabled(false);
+        int approved = chooser.showOpenDialog(jFrame);
+        if ( approved == JFileChooser.APPROVE_OPTION ) {
+            File attendancefile = chooser.getSelectedFile();
+            AttendanceModel am = new AttendanceModel();
+            attendanceTable = am.loadData(attendancefile);
             jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
             jFrame.add(table, BorderLayout.CENTER);
         }
