@@ -8,6 +8,7 @@ public class Attendee extends Student implements Cloneable {
     }
 
     public Attendee(String firstName, String lastName, String asuriteId, int attendanceMinutes) {
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.asuriteId = asuriteId;

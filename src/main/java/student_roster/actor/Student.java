@@ -17,6 +17,8 @@ public class Student {
         this.asuriteId = asuriteId;
     }
 
+    public Student() { }
+
     public String getFirstName() {
         return firstName;
     }
