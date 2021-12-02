@@ -2,7 +2,6 @@ package student_roster;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.JDialog;
 
 import java.awt.*;
 
