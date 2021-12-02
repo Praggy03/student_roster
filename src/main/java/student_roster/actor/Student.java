@@ -4,14 +4,18 @@ public class Student {
     protected String firstName;
     protected String lastName;
     protected String asuriteId;
+    protected String program;
+    protected String level;
+    protected String id;
 
-    public Student(String firstName, String lastName, String asuriteId) {
+    public Student(String id, String firstName, String lastName, String program, String level, String asuriteId) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.program = program;
+        this.level = level;
         this.asuriteId = asuriteId;
     }
-
-    public Student() { }
 
     public String getFirstName() {
         return firstName;
