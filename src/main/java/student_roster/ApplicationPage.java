@@ -18,7 +18,7 @@ public class ApplicationPage {
     private JTable rosterTable;
     private JScrollPane tableScrollPane;
     private JPanel tablePanel;
-
+    private JTable attendanceTable;
 
 
 
@@ -54,6 +54,7 @@ public class ApplicationPage {
 
         addAttendanceItem = new JMenuItem("Add Attendance");
         fileMenu.add(addAttendanceItem);
+        addAttendanceItem.addActionListener(e->loadAttendance());
 
         saveItem = new JMenuItem("Save");
         fileMenu.add(saveItem);
@@ -87,6 +88,28 @@ public class ApplicationPage {
             jFrame.setSize(1440,1080);
             rosterTable.setVisible(true);
 
+        }
+    }
+
+    private void loadAttendance() {
+
+        //DatePicker
+
+
+
+
+//        Loading the CSV File
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV files (*.csv)", "csv");
+        chooser.setFileFilter(fileFilter);
+        chooser.setMultiSelectionEnabled(false);
+        int approved = chooser.showOpenDialog(jFrame);
+        if ( approved == JFileChooser.APPROVE_OPTION ) {
+            File attendancefile = chooser.getSelectedFile();
+            AttendanceModel am = new AttendanceModel();
+            attendanceTable = am.loadData(attendancefile);
+            jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
+            jFrame.add(table, BorderLayout.CENTER);
         }
     }
 
