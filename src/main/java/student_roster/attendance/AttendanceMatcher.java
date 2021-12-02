@@ -6,15 +6,36 @@ import student_roster.actor.Student;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * This class is used to Match attendance records with student records, merge records with same ASU ID
+ * and report all attendees that have no student record
+ */
 public class AttendanceMatcher {
 
+    // TODO: This PSVM is to be removed and is only here for explanation
+    public static void main(String[] args) {
+
+        // Below steps can be followed for loading attendance:
+        // 1. Load Attendance data from CSV
+        // 2. Store the loaded student data into a List<Attendee>
+        //    This is just like load roster but with an additional attendance minutes property
+        // 3. Pass this list to the below method by replacing ArrayList with the list of attendees generated above
+
+        List<Attendee> mergedAttendees = AttendanceMatcher.getAttendanceMatcher().mergeLoadedAttendees(new ArrayList<>());
+
+        // 4. At this point, the merged attendees should be displayed on the UI with an additional date column
+        // 5. Next, pass these merged attendees back to attendance matcher to report all merged attendees
+
+        AttendanceMatcher.getAttendanceMatcher().reportAdditionalAttendees(mergedAttendees);
+    }
+
     private static AttendanceMatcher attendanceMatcher;
+
 
     /**
      * This method implements a factory pattern, wherein just one object
@@ -24,49 +45,52 @@ public class AttendanceMatcher {
      * @return an AttendanceMatcher object
      */
     public static AttendanceMatcher getAttendanceMatcher() {
-        if(attendanceMatcher == null) {
+        if (attendanceMatcher == null) {
             attendanceMatcher = new AttendanceMatcher();
         }
         return attendanceMatcher;
     }
 
+
     /**
-     * This method will merge all attendees with same ASU ID
+     * This method merges all attendees that have the same ASURITE ID and while merging, it
+     * sums up their minutes of attendance
      *
-     * @param attendees is the list of students who attended the class
-     * @param date is the current date
-     * @return a list of merged attendees
+     * @param attendees is the list of attendees to be merged
+     * @return a merged list
      */
-    public List<Attendee> matchAttendance(List<Attendee> attendees, LocalDateTime date) {
-        // This list will be passed to this method by Add Attendance feature
-        attendees = Arrays.asList(
-                new Attendee("firstName", "lastName", "fname", 10),
-                new Attendee("firstName2", "lastName2", "fname2", 15),
-                new Attendee("Jane", "Doe", "jdoe", 5),
-                new Attendee("Pooja", "Kulkarni", "pkulka", 1),
-                new Attendee("Pooja", "Kulkarni", "pkulka", 3),
-                new Attendee("Pooja", "Kulkarni", "pkulka", 4),
-                new Attendee("Jane", "Doe", "jdoe", 7)
-        );
-
-        // We merge all attendees that have the same ASU ID
-        return mergeLoadedAttendees(attendees);
-
+    public List<Attendee> mergeLoadedAttendees(List<Attendee> attendees) {
+        return attendees
+                .stream()
+                .collect(Collectors.toMap(
+                        Attendee::getAsuriteId,
+                        Function.identity(),
+                        (attendee1, attendee2) -> {
+                            Attendee mergedAttendee = attendee1.clone();
+                            mergedAttendee.setAttendanceMinutes(attendee1.getAttendanceMinutes() + attendee2.getAttendanceMinutes());
+                            return mergedAttendee;
+                        })
+                )
+                .values()
+                .stream()
+                .toList();
     }
 
-    public void reportAdditionalAttendees(List<Attendee> mergedAttendees) {
-        // Get all students from the static data loaded from Load Roster feature
-        List<Student> allStudents = Arrays.asList(
-                new Student("firstName", "lastName", "fname"),
-                new Student("firstName2", "lastName2", "fname2"),
-                new Student("Pooja", "Kulkarni", "pkulka")
-        );
+
+    /**
+     * This method will report all attendees that were not present in the student data
+     *
+     * @param attendees is the list of all students who attended the class
+     */
+    public void reportAdditionalAttendees(List<Attendee> attendees) {
+        // TODO: Get all students from the static data loaded from Load Roster feature.
+        List<Student> allStudents = new ArrayList<>();
 
         // We use the merged list to find out the list of all students not present in the students list
-        List<Attendee> additionalAttendees = getAdditionalAttendees(allStudents, mergedAttendees);
+        List<Attendee> additionalAttendees = getAdditionalAttendees(allStudents, attendees);
 
         // We then open a dialog that displays number of loaded attendees and additional attendees, if any
-        displayReportDialog(additionalAttendees, mergedAttendees.size());
+        displayReportDialog(additionalAttendees, attendees.size());
     }
 
 
@@ -138,31 +162,6 @@ public class AttendanceMatcher {
         text.insert(0, "<html><body><p>");
         text.append("</p></body></html>");
         return text.toString().replace("\n", "<br>");
-    }
-
-
-    /**
-     * This method merges all attendees that have the same ASURITE ID and while merging, it
-     * sums up their minutes of attendance
-     *
-     * @param attendees is the list of attendees to be merged
-     * @return a merged list
-     */
-    private List<Attendee> mergeLoadedAttendees(List<Attendee> attendees) {
-        return attendees
-                .stream()
-                .collect(Collectors.toMap(
-                        Attendee::getAsuriteId,
-                        Function.identity(),
-                        (attendee1, attendee2) -> {
-                            Attendee mergedAttendee = attendee1.clone();
-                            mergedAttendee.setAttendanceMinutes(attendee1.getAttendanceMinutes() + attendee2.getAttendanceMinutes());
-                            return mergedAttendee;
-                        })
-                )
-                .values()
-                .stream()
-                .toList();
     }
 
 }
