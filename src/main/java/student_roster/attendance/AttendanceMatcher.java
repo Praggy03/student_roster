@@ -36,7 +36,8 @@ public class AttendanceMatcher {
 
     private static AttendanceMatcher attendanceMatcher;
     private static List<List<Attendee>> allMergedAttendees;
-    public static List<List<Attendee>> getMergedAttendees() {
+
+    public List<List<Attendee>> getMergedAttendees() {
         return allMergedAttendees;
     }
 
