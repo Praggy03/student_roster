@@ -1,5 +1,7 @@
 package student_roster;
 
+import student_roster.attendance.AttendanceMatcher;
+
 import javax.swing.*;
 import java.io.*;
 import java.awt.*;
@@ -29,11 +31,14 @@ public class Savedata {
 
 
             String[] columns = {"Name","Age","Gender"};
-            Object[][] data = {
-                    {"Jasvith","21","Male"},
-                    {"Chetan","21","Male"},
-                    {"Jaanu","21","Female"}
-            };
+            int attendeeSize = Roster.students.size();
+            int dates = loadattendance.getAttendanceDates().size();
+            Object[][] data = new Object[attendeeSize][6 + dates];
+            for (int i = 0; i < attendeeSize; i++) {
+                for (int j = 6; j < dates; j++) {
+
+                }
+            }
 
             JTable jTable1 = new JTable(data, columns);
             JFileChooser fileChooser = new JFileChooser();
