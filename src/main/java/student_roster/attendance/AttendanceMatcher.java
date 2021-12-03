@@ -1,7 +1,7 @@
 package student_roster.attendance;
 
-import student_roster.ApplicationPage;
-import student_roster.Roster;
+import student_roster.load.ApplicationPage;
+import student_roster.load.Roster;
 import student_roster.util.Utils;
 import student_roster.actor.Attendee;
 import student_roster.actor.Student;
@@ -140,16 +140,15 @@ public class AttendanceMatcher {
      * This method displays a dialog to report the attendees that are not a part of the student roster
      *
      * @param additionalAttendees is the list of students to be reported
-     * @param numberOfAttendees   is the number of loaded attendees
      */
-    public void displayReportDialog(List<Attendee> additionalAttendees, int numberOfAttendees) {
+    public void displayReportDialog(List<Attendee> additionalAttendees) {
         JDialog dialog = new JDialog(ApplicationPage.jFrame, "Matched attendance data!", true);
         dialog.setLayout(new FlowLayout());
         dialog.setVisible(false);
 
         StringBuilder studentReport = new StringBuilder();
         studentReport.append("Data loaded for ")
-                .append(numberOfAttendees)
+                .append(Roster.students.size())
                 .append(" students in the roster\n\n");
 
         if (additionalAttendees != null && !additionalAttendees.isEmpty()) {

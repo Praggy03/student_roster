@@ -1,4 +1,4 @@
-package student_roster;
+package student_roster.load;
 
 import com.opencsv.CSVReader;
 import student_roster.actor.Student;

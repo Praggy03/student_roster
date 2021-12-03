@@ -1,7 +1,8 @@
-package student_roster;
+package student_roster.load;
 
 import student_roster.attendance.LoadAttendance;
 import student_roster.persistence.SaveData;
+import student_roster.plotdata.ScatterPlot;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -66,7 +67,7 @@ public class ApplicationPage {
 
         plotDataItem = new JMenuItem("Plot Data");
         fileMenu.add(plotDataItem);
-        plotDataItem.addActionListener(e->scatter.scatterPlot());
+        plotDataItem.addActionListener(e-> ScatterPlot.scatterPlot());
 
         jFrame.setJMenuBar(menuBar);
         jFrame.setVisible(true);

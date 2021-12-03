@@ -1,8 +1,8 @@
 package student_roster.attendance;
 
 import com.toedter.calendar.JDateChooser;
-import student_roster.ApplicationPage;
-import student_roster.Roster;
+import student_roster.load.ApplicationPage;
+import student_roster.load.Roster;
 import student_roster.util.Utils;
 import student_roster.actor.Attendee;
 
@@ -57,13 +57,13 @@ public class LoadAttendance {
                     String[] minutes = new String[attendees.size()];
                     attendees.forEach(attendee -> minutes[attendee.getPosition()] = String.valueOf(attendee.getAttendanceMinutes()));
                     Roster.model.addColumn(date, minutes);
-                    attendanceMatcher.displayReportDialog(additionalAttendees, attendees.size());
+                    attendanceMatcher.displayReportDialog(additionalAttendees);
                 }
 
             });
 
         } else {
-            Utils.displayLoadRosterDialog("Cannot load attendance without loading student data.\nPlease load student data by choosing Load a Roster option");
+            Utils.displayLoadRosterDialog("Cannot load attendance without loading student data.\nPlease load student data by choosing Load a Roster option", "Operation denied");
         }
     }
 

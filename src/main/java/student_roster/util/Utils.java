@@ -1,6 +1,6 @@
 package student_roster.util;
 
-import student_roster.ApplicationPage;
+import student_roster.load.ApplicationPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +21,8 @@ public class Utils {
         return text.toString().replace("\n", "<br>");
     }
 
-    public static void displayLoadRosterDialog(String errorDialog) {
-        JDialog dialog = new JDialog(ApplicationPage.jFrame, "Cannot load attendance", true);
+    public static void displayLoadRosterDialog(String errorDialog, String title) {
+        JDialog dialog = new JDialog(ApplicationPage.jFrame, title, true);
         dialog.setLayout(new FlowLayout());
         dialog.setVisible(false);
         StringBuilder builder = new StringBuilder(errorDialog);

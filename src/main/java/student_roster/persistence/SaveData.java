@@ -1,7 +1,7 @@
 package student_roster.persistence;
 
-import student_roster.ApplicationPage;
-import student_roster.Roster;
+import student_roster.load.ApplicationPage;
+import student_roster.load.Roster;
 import student_roster.actor.Attendee;
 import student_roster.attendance.AttendanceMatcher;
 import student_roster.attendance.LoadAttendance;
@@ -75,7 +75,6 @@ public class SaveData {
                     bw.newLine();
                     for (int i = 0; i < jTable1.getRowCount(); i++) {
                         for (int j = 0; j < jTable1.getColumnCount(); j++) {
-                            System.out.println("i: " + i + ", j: " + j);
                             bw.write(jTable1.getValueAt(i, j).toString() + ",");
                         }
                         bw.newLine();
@@ -90,7 +89,7 @@ public class SaveData {
 
             }
         } else {
-            Utils.displayLoadRosterDialog("Cannot save data without loading attendance data.\nPlease load attendance data by choosing Add Attendance option");
+            Utils.displayLoadRosterDialog("Cannot save data without loading attendance data.\nPlease load attendance data by choosing Add Attendance option", "Operation denied");
         }
     }
 

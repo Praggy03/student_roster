@@ -1,7 +1,7 @@
 package student_roster.attendance;
 
 import com.opencsv.CSVReader;
-import student_roster.ApplicationPage;
+import student_roster.load.ApplicationPage;
 import student_roster.actor.Attendee;
 
 import javax.swing.*;
