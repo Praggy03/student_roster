@@ -62,6 +62,7 @@ public class ApplicationPage {
 
         plotDataItem = new JMenuItem("Plot Data");
         fileMenu.add(plotDataItem);
+        plotDataItem.addActionListener(e->scatter.scatterPlot());
 
         jFrame.setJMenuBar(menuBar);
         jFrame.setVisible(true);
@@ -108,8 +109,8 @@ public class ApplicationPage {
             File attendancefile = chooser.getSelectedFile();
             AttendanceModel am = new AttendanceModel();
             attendanceTable = am.loadData(attendancefile);
-            jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
-            jFrame.add(table, BorderLayout.CENTER);
+            //jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
+            //jFrame.add(table, BorderLayout.CENTER);
         }
     }
 
