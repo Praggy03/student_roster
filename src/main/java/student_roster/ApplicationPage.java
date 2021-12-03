@@ -63,6 +63,7 @@ public class ApplicationPage {
 
         plotDataItem = new JMenuItem("Plot Data");
         fileMenu.add(plotDataItem);
+        plotDataItem.addActionListener(e->scatter.scatterPlot());
 
         jFrame.setJMenuBar(menuBar);
         jFrame.setVisible(true);

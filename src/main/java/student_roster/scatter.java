@@ -1,3 +1,5 @@
+package student_roster;
+
 import javax.swing.*;
 import java.io.*;
 import java.awt.*;
@@ -17,6 +19,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.chart.plot.PlotOrientation;
+import student_roster.actor.Attendee;
+import student_roster.attendance.AttendanceMatcher;
 
 
 public class scatter {
@@ -72,7 +76,11 @@ public class scatter {
 
 
 
-    public static void main(String[] args) {
+    public static void scatterPlot() {
+
+        // Get Merged Attendee List from AttendanceMatcher.java
+         List<Attendee> newList = AttendanceMatcher.getAttendanceMatcher().getMergedAttendees();
+         System.out.println("newList"+newList);
 
         //CSV Reader
         String path = "src/RosterAttendance.csv";
@@ -96,143 +104,128 @@ public class scatter {
         }//End of CSV Reader
 
 
-        JFrame frame = new JFrame();
-        frame.setTitle("Attendence Statistics - Scatter Plot");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setSize(420,420);
-        frame.setVisible(true);
-        frame.getContentPane().setBackground(new Color(155,55,44));
-        frame.setLocationRelativeTo(null);
-        //frame.pack(); //should be the last command otherwise won't work
 
         int total = 75; //total time of each class
 
         JButton btnPlotData = new JButton("Plot Data");
-        btnPlotData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String[] columns = {"Last Name","Program","Level", "ASURITE","Nov10","Nov15","Nov21","Dec1"};
-                Object[][] data = {
-                        {"Spade","CS","Grad","1222232332","78","22","21","68"},
-                        {"Martinez","CS","Grad","1522232332","60","72","21","68"},
-                        {"Martinez","CS","Grad","1522232332","60","72","21","68"},
-                        {"Bob","CS","Grad","1222332332","10","72","21","68"},
-                        {"Martinez","CS","Grad","1522232332","20","62","21","68"},
-                        {"Martinez","CS","Grad","1522232332","20","42","21","68"},
-                        {"Martinez","CS","Grad","1522232332","20","42","21","68"}
-                };
+        String[] columns = {"Last Name","Program","Level", "ASURITE","Nov10","Nov15","Nov21","Dec1"};
+        Object[][] data = {
+                {"Spade","CS","Grad","1222232332","78","22","21","68"},
+                {"Martinez","CS","Grad","1522232332","60","72","21","68"},
+                {"Martinez","CS","Grad","1522232332","60","72","21","68"},
+                {"Bob","CS","Grad","1222332332","10","72","21","68"},
+                {"Martinez","CS","Grad","1522232332","20","62","21","68"},
+                {"Martinez","CS","Grad","1522232332","20","42","21","68"},
+                {"Martinez","CS","Grad","1522232332","20","42","21","68"}
+        };
 
-                JTable jTable1 = new JTable(data, columns);
-                int count = data.length;
-                int columnLength = data[0].length;
+        JTable jTable1 = new JTable(data, columns);
+        int count = data.length;
+        int columnLength = data[0].length;
 
-                Integer counter[][][] = new Integer[columnLength-4][count][2];
-                Integer finalArray[][][] = new Integer[columnLength-4][count][2];
+        Integer counter[][][] = new Integer[columnLength-4][count][2];
+        Integer finalArray[][][] = new Integer[columnLength-4][count][2];
 
-                counter = calculatePercentageArray(jTable1, count, columnLength); //Call function which calculates percentage and makes the array
+        counter = calculatePercentageArray(jTable1, count, columnLength); //Call function which calculates percentage and makes the array
 
-                finalArray = mergeCountArray(counter, count, columnLength); //Call function which merges count array
+        finalArray = mergeCountArray(counter, count, columnLength); //Call function which merges count array
 
 
-                // Work on load roaster + attendance combined CSV....plot
-                XYSeriesCollection dataset = new XYSeriesCollection();
-                String key[] = new String[columnLength-4];
+        // Work on load roaster + attendance combined CSV....plot
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        String key[] = new String[columnLength-4];
 
-                for(int f=0 ; f<columnLength-4 ; f++) {
-                    if(f==0) {
-                        XYSeries series1 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series1.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series1);
-                    }
-                    if(f==1) {
-                        XYSeries series2 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series2.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series2);
-                    }
-                    if(f==2) {
-                        XYSeries series3 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series3.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series3);
-                    }
-                    if(f==3) {
-                        XYSeries series4 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series4.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series4);
-                    }
-                    if(f==4) {
-                        XYSeries series5 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series5.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series5);
-                    }
-                    if(f==5) {
-                        XYSeries series6 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series6.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series6);
-                    }
-                    if(f==6) {
-                        XYSeries series7 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series7.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series7);
-                    }
-                    if(f==7) {
-                        XYSeries series8 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series8.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series8);
-                    }
-                    if(f==8) {
-                        XYSeries series9 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series9.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series9);
-                    }
-                    if(f==10) {
-                        XYSeries series10 = new XYSeries(columns[f + 4]);
-                        for (int l = 0; l < count; l++) {
-                            series10.add(finalArray[f][l][0], finalArray[f][l][1]);
-                        }
-                        dataset.addSeries(series10);
-                    }
+        for(int f=0 ; f<columnLength-4 ; f++) {
+            if(f==0) {
+                XYSeries series1 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series1.add(finalArray[f][l][0], finalArray[f][l][1]);
                 }
-
-
-                JFreeChart scatterPlot = ChartFactory.createScatterPlot(
-                        "Attendance Scatter Plot", // Chart title
-                        "Percentage", // X-Axis Label
-                        "Count", // Y-Axis Label
-                        dataset // Dataset for the Chart
-                );
-
-                //ChartUtilities.saveChartAsPNG(new File("C://Users/Abhinav/scatterplot.png"), scatterPlot, 600, 400);
-
-
-                ChartFrame frame2= new ChartFrame("Plot Chart", scatterPlot);
-                frame2.setVisible(true);
-                frame2.setSize(800, 400);
-                frame2.setTitle("Attendence Statistics - Scatter Plot");
-                frame2.setResizable(false);
-                frame2.setLocationRelativeTo(null);
-                //frame2.setLayout( new FlowLayout() );
+                dataset.addSeries(series1);
             }
-        });
+            if(f==1) {
+                XYSeries series2 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series2.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series2);
+            }
+            if(f==2) {
+                XYSeries series3 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series3.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series3);
+            }
+            if(f==3) {
+                XYSeries series4 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series4.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series4);
+            }
+            if(f==4) {
+                XYSeries series5 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series5.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series5);
+            }
+            if(f==5) {
+                XYSeries series6 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series6.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series6);
+            }
+            if(f==6) {
+                XYSeries series7 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series7.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series7);
+            }
+            if(f==7) {
+                XYSeries series8 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series8.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series8);
+            }
+            if(f==8) {
+                XYSeries series9 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series9.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series9);
+            }
+            if(f==10) {
+                XYSeries series10 = new XYSeries(columns[f + 4]);
+                for (int l = 0; l < count; l++) {
+                    series10.add(finalArray[f][l][0], finalArray[f][l][1]);
+                }
+                dataset.addSeries(series10);
+            }
+        }
 
-        btnPlotData.setBounds(165, 116, 117, 29);
-        frame.getContentPane().add(btnPlotData);
+
+        JFreeChart scatterPlot = ChartFactory.createScatterPlot(
+                "Attendance Scatter Plot", // Chart title
+                "Percentage", // X-Axis Label
+                "Count", // Y-Axis Label
+                dataset // Dataset for the Chart
+        );
+
+        //ChartUtilities.saveChartAsPNG(new File("C://Users/Abhinav/scatterplot.png"), scatterPlot, 600, 400);
+
+
+        ChartFrame frame2= new ChartFrame("Plot Chart", scatterPlot);
+        frame2.setVisible(true);
+        frame2.setSize(800, 400);
+        frame2.setTitle("Attendence Statistics - Scatter Plot");
+        frame2.setResizable(false);
+        frame2.setLocationRelativeTo(null);
+        //frame2.setLayout( new FlowLayout() );
+
     }
 }

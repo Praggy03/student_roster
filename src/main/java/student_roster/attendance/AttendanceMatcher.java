@@ -35,10 +35,10 @@ public class AttendanceMatcher {
     }
 
     private static AttendanceMatcher attendanceMatcher;
-    private List<Attendee> mergedAttendees;
+    private static List<List<Attendee>> allMergedAttendees;
 
-    public List<Attendee> getMergedAttendees() {
-        return this.mergedAttendees;
+    public List<List<Attendee>> getMergedAttendees() {
+        return allMergedAttendees;
     }
 
 
@@ -52,6 +52,7 @@ public class AttendanceMatcher {
     public static AttendanceMatcher getAttendanceMatcher() {
         if (attendanceMatcher == null) {
             attendanceMatcher = new AttendanceMatcher();
+            allMergedAttendees = new ArrayList<>();
         }
         return attendanceMatcher;
     }
@@ -79,7 +80,7 @@ public class AttendanceMatcher {
                 .values()
                 .stream()
                 .toList();
-        this.mergedAttendees = mergedAttendees;
+        allMergedAttendees.add(mergedAttendees);
         return mergedAttendees;
     }
 
