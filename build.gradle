@@ -14,3 +14,11 @@ dependencies {
 
 apply plugin: 'application'
 mainClassName = 'student_roster.StudentRosterSystem'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'student_roster.StudentRosterSystem'
+        )
+    }
+}
