@@ -1,6 +1,8 @@
 package student_roster.actor;
 
-public class Attendee extends Student implements Cloneable {
+import java.util.Comparator;
+
+public class Attendee extends Student implements Cloneable, Comparator<Attendee> {
     private int attendanceMinutes;
 
     public Attendee() {
@@ -32,5 +34,10 @@ public class Attendee extends Student implements Cloneable {
     @Override
     public String toString() {
         return  "Attendee: " + this.getAsuriteId() + ", minutes: " + this.getAttendanceMinutes();
+    }
+
+    @Override
+    public int compare(Attendee o1, Attendee o2) {
+        return o1.getAsuriteId().compareTo(o2.getAsuriteId());
     }
 }

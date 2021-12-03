@@ -1,26 +1,27 @@
 package student_roster;
 
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTable;
-import com.opencsv.*;
+import com.opencsv.CSVReader;
 import student_roster.actor.Student;
 
-import javax.swing.JOptionPane;
-
-
-import java.awt.*;
-import java.io.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 public class Roster {
 
     public Roster() {
-        students = new ArrayList<Student>();
+        students = new ArrayList<>();
+        studentsMap = new HashMap<>();
     }
 
     public static ArrayList<Student> students;
+    public static Map<String, Student> studentsMap;
     public static DefaultTableModel model;
     public JTable table;
     private CSVReader csvReader;
@@ -49,11 +50,10 @@ public class Roster {
                 }
             }
         } catch (Exception e) {
-            errorDialog("An error occured while processing your CSV", "Fatal!");
+            errorDialog("An error occured while processing your CSV. Please make sure the format is correct", "Fatal!");
             return null;
         }
 
-        System.out.println(table);
         return table;
     }
 
@@ -67,6 +67,7 @@ public class Roster {
             return false;
         }
         students.add(student);
+        studentsMap.put(student.getAsuriteId(), student);
         return true;
     }
 

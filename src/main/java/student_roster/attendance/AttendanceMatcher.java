@@ -2,14 +2,13 @@ package student_roster.attendance;
 
 import student_roster.ApplicationPage;
 import student_roster.Roster;
+import student_roster.util.Utils;
 import student_roster.actor.Attendee;
 import student_roster.actor.Student;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,23 +18,6 @@ import java.util.stream.Collectors;
  * and report all attendees that have no student record
  */
 public class AttendanceMatcher {
-
-    // TODO: This PSVM is to be removed and is only here for explanation
-//    public static void main(String[] args) {
-//
-//        // Below steps can be followed for loading attendance:
-//        // 1. Load Attendance data from CSV
-//        // 2. Store the loaded student data into a List<Attendee>
-//        //    This is just like load roster but with an additional attendance minutes property
-//        // 3. Pass this list to the below method by replacing ArrayList with the list of attendees generated above
-//
-////        List<Attendee> mergedAttendees = AttendanceMatcher.getAttendanceMatcher().mergeLoadedAttendees(new a);
-//
-//        // 4. At this point, the merged attendees should be displayed on the UI with an additional date column
-//        // 5. Next, pass these merged attendees back to attendance matcher to report all merged attendees
-//
-//        AttendanceMatcher.getAttendanceMatcher().reportAdditionalAttendees(mergedAttendees);
-//    }
 
     private static AttendanceMatcher attendanceMatcher;
     private static List<List<Attendee>> allMergedAttendees;
@@ -60,31 +42,20 @@ public class AttendanceMatcher {
         return attendanceMatcher;
     }
 
-    public List<Attendee> addAdditionalAttendees(List<Attendee> mergedAttendees) {
-        List<Attendee> additionalAttendees = new ArrayList<>();
-        for(Student student: Roster.students) {
+    public List<Attendee> addAbsentStudents(List<Attendee> mergedAttendees) {
+        List<Attendee> additionalAttendees = new ArrayList<>(mergedAttendees);
+        for (Student student : Roster.students) {
             boolean found = false;
-            Attendee newAttendee = new Attendee();
 
-            newAttendee.setId(student.getId());
-            newAttendee.setFirstName(student.getFirstName());
-            newAttendee.setLastName(student.getLastName());
-            newAttendee.setProgram(student.getProgram());
-            newAttendee.setLevel(student.getLevel());
-            newAttendee.setPosition(student.getPosition());
-            newAttendee.setAsuriteId(student.getAsuriteId());
-
-            for(Attendee attendee: mergedAttendees) {
+            for (Attendee attendee : mergedAttendees) {
                 if (attendee.getAsuriteId().equals(student.getAsuriteId())) {
                     found = true;
-                    newAttendee.setAttendanceMinutes(attendee.getAttendanceMinutes());
                     break;
                 }
             }
-            if(!found) {
-                newAttendee.setAttendanceMinutes(0);
+            if (!found) {
+                additionalAttendees.add(new Attendee(student.getAsuriteId(), 0));
             }
-            additionalAttendees.add(newAttendee);
         }
         return additionalAttendees;
     }
@@ -99,7 +70,7 @@ public class AttendanceMatcher {
      */
     public List<Attendee> mergeLoadedAttendees(List<Attendee> attendees) {
 
-        List<Attendee> mergedAttendees = attendees
+        return attendees
                 .stream()
                 .collect(Collectors.toMap(
                         Attendee::getAsuriteId,
@@ -113,8 +84,21 @@ public class AttendanceMatcher {
                 .values()
                 .stream()
                 .toList();
-        allMergedAttendees.add(mergedAttendees);
-        return mergedAttendees;
+    }
+
+    public void loadStudentDataIntoAttendees(List<Attendee> attendees) {
+        for (Attendee attendee : attendees) {
+            if (Roster.studentsMap.containsKey(attendee.getAsuriteId())) {
+                Student student = Roster.studentsMap.get(attendee.getAsuriteId());
+                attendee.setId(student.getId());
+                attendee.setAsuriteId(student.getAsuriteId());
+                attendee.setFirstName(student.getFirstName());
+                attendee.setLastName(student.getLastName());
+                attendee.setProgram(student.getProgram());
+                attendee.setLevel(student.getLevel());
+                attendee.setPosition(student.getPosition());
+            }
+        }
     }
 
 
@@ -123,15 +107,17 @@ public class AttendanceMatcher {
      *
      * @param attendees is the list of all students who attended the class
      */
-    public void reportAdditionalAttendees(List<Attendee> attendees) {
-        // TODO: Get all students from the static data loaded from Load Roster feature.
-        List<Student> allStudents = new ArrayList<>();
-
-        // We use the merged list to find out the list of all students not present in the students list
-        List<Attendee> additionalAttendees = getAdditionalAttendees(allStudents, attendees);
-
-        // We then open a dialog that displays number of loaded attendees and additional attendees, if any
-        displayReportDialog(additionalAttendees, attendees.size());
+    public List<Attendee> reportAndRemoveAdditionalAttendees(List<Attendee> attendees) {
+        List<Attendee> additionalAttendees = getAdditionalAttendees(attendees);
+        List<Attendee> validAttendees = new ArrayList<>();
+        for (Attendee attendee: attendees) {
+            if(!additionalAttendees.contains(attendee)) {
+                validAttendees.add(attendee);
+            }
+        }
+        attendees = validAttendees;
+        allMergedAttendees.add(attendees);
+        return additionalAttendees;
     }
 
 
@@ -139,14 +125,13 @@ public class AttendanceMatcher {
      * This method will return a list of all attendees that were present in the attendees CSV data but not in the
      * students CSV data
      *
-     * @param attendees   is the list of attendees who attended the class
-     * @param allStudents is the list of all students
+     * @param attendees is the list of attendees who attended the class
      * @return a reduced list of attendees that are not students for the course
      */
-    private List<Attendee> getAdditionalAttendees(List<Student> allStudents, List<Attendee> attendees) {
+    private List<Attendee> getAdditionalAttendees(List<Attendee> attendees) {
         return attendees
                 .stream()
-                .filter(attendee -> !allStudents.contains(attendee))
+                .filter(attendee -> !Roster.studentsMap.containsKey(attendee.getAsuriteId()))
                 .collect(Collectors.toList());
     }
 
@@ -157,7 +142,7 @@ public class AttendanceMatcher {
      * @param additionalAttendees is the list of students to be reported
      * @param numberOfAttendees   is the number of loaded attendees
      */
-    private void displayReportDialog(List<Attendee> additionalAttendees, int numberOfAttendees) {
+    public void displayReportDialog(List<Attendee> additionalAttendees, int numberOfAttendees) {
         JDialog dialog = new JDialog(ApplicationPage.jFrame, "Matched attendance data!", true);
         dialog.setLayout(new FlowLayout());
         dialog.setVisible(false);
@@ -174,7 +159,7 @@ public class AttendanceMatcher {
                     .append("found!\n\n");
 
             additionalAttendees.forEach(additionalAttendee -> studentReport
-                    .append(additionalAttendee.getName())
+                    .append(additionalAttendee.getAsuriteId())
                     .append(", connected for ")
                     .append(additionalAttendee.getAttendanceMinutes())
                     .append(additionalAttendee.getAttendanceMinutes() == 1 ? " minute" : " minutes")
@@ -183,26 +168,11 @@ public class AttendanceMatcher {
             studentReport.append("No additional attendees found!");
         }
 
-        dialog.add(new JLabel(wrapInHtml(studentReport)));
+        dialog.add(new JLabel(Utils.wrapInHtml(studentReport)));
         dialog.setBounds(
                 new Rectangle(ApplicationPage.jFrame.getWidth() / 2 - 250, ApplicationPage.jFrame.getHeight() / 2 - 250, 500, 300)
         );
         dialog.setVisible(true);
-    }
-
-
-    /**
-     * This method wraps the string contained by the string builder in HTML
-     * This is done so that all "\n", i.e. next line characters can be replaced
-     * by \<br\> and the dialog lines are displayed one after the other
-     *
-     * @param text is the sting builder text to be wrapped with HTML
-     * @return the wrapped string
-     */
-    private String wrapInHtml(StringBuilder text) {
-        text.insert(0, "<html><body><p>");
-        text.append("</p></body></html>");
-        return text.toString().replace("\n", "<br>");
     }
 
 }

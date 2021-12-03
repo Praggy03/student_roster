@@ -1,5 +1,8 @@
 package student_roster;
 
+import student_roster.attendance.LoadAttendance;
+import student_roster.persistence.SaveData;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -54,11 +57,11 @@ public class ApplicationPage {
 
         addAttendanceItem = new JMenuItem("Add Attendance");
         fileMenu.add(addAttendanceItem);
-        addAttendanceItem.addActionListener(e->loadattendance.ldattendance());
+        addAttendanceItem.addActionListener(e-> LoadAttendance.loadAttendance());
 
         saveItem = new JMenuItem("Save");
         fileMenu.add(saveItem);
-        saveItem.addActionListener(e->Savedata.initialize());
+        saveItem.addActionListener(e-> SaveData.initialize());
 
 
         plotDataItem = new JMenuItem("Plot Data");
