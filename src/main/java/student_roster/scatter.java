@@ -79,8 +79,8 @@ public class scatter {
     public static void scatterPlot() {
 
         // Get Merged Attendee List from AttendanceMatcher.java
-         List<Attendee> newList = AttendanceMatcher.getAttendanceMatcher().getMergedAttendees();
-         System.out.println("newList"+newList);
+         //List<Attendee> newList = AttendanceMatcher.getAttendanceMatcher().getMergedAttendees();
+         //System.out.println("newList"+newList);
 
         //CSV Reader
         String path = "src/RosterAttendance.csv";

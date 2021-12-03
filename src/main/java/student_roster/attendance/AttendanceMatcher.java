@@ -1,12 +1,15 @@
 package student_roster.attendance;
 
 import student_roster.ApplicationPage;
+import student_roster.Roster;
 import student_roster.actor.Attendee;
 import student_roster.actor.Student;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,21 +21,21 @@ import java.util.stream.Collectors;
 public class AttendanceMatcher {
 
     // TODO: This PSVM is to be removed and is only here for explanation
-    public static void main(String[] args) {
-
-        // Below steps can be followed for loading attendance:
-        // 1. Load Attendance data from CSV
-        // 2. Store the loaded student data into a List<Attendee>
-        //    This is just like load roster but with an additional attendance minutes property
-        // 3. Pass this list to the below method by replacing ArrayList with the list of attendees generated above
-
-        List<Attendee> mergedAttendees = AttendanceMatcher.getAttendanceMatcher().mergeLoadedAttendees(new ArrayList<>());
-
-        // 4. At this point, the merged attendees should be displayed on the UI with an additional date column
-        // 5. Next, pass these merged attendees back to attendance matcher to report all merged attendees
-
-        AttendanceMatcher.getAttendanceMatcher().reportAdditionalAttendees(mergedAttendees);
-    }
+//    public static void main(String[] args) {
+//
+//        // Below steps can be followed for loading attendance:
+//        // 1. Load Attendance data from CSV
+//        // 2. Store the loaded student data into a List<Attendee>
+//        //    This is just like load roster but with an additional attendance minutes property
+//        // 3. Pass this list to the below method by replacing ArrayList with the list of attendees generated above
+//
+////        List<Attendee> mergedAttendees = AttendanceMatcher.getAttendanceMatcher().mergeLoadedAttendees(new a);
+//
+//        // 4. At this point, the merged attendees should be displayed on the UI with an additional date column
+//        // 5. Next, pass these merged attendees back to attendance matcher to report all merged attendees
+//
+//        AttendanceMatcher.getAttendanceMatcher().reportAdditionalAttendees(mergedAttendees);
+//    }
 
     private static AttendanceMatcher attendanceMatcher;
     private static List<List<Attendee>> allMergedAttendees;
@@ -57,6 +60,35 @@ public class AttendanceMatcher {
         return attendanceMatcher;
     }
 
+    public List<Attendee> addAdditionalAttendees(List<Attendee> mergedAttendees) {
+        List<Attendee> additionalAttendees = new ArrayList<>();
+        for(Student student: Roster.students) {
+            boolean found = false;
+            Attendee newAttendee = new Attendee();
+
+            newAttendee.setId(student.getId());
+            newAttendee.setFirstName(student.getFirstName());
+            newAttendee.setLastName(student.getLastName());
+            newAttendee.setProgram(student.getProgram());
+            newAttendee.setLevel(student.getLevel());
+            newAttendee.setPosition(student.getPosition());
+            newAttendee.setAsuriteId(student.getAsuriteId());
+
+            for(Attendee attendee: mergedAttendees) {
+                if (attendee.getAsuriteId().equals(student.getAsuriteId())) {
+                    found = true;
+                    newAttendee.setAttendanceMinutes(attendee.getAttendanceMinutes());
+                    break;
+                }
+            }
+            if(!found) {
+                newAttendee.setAttendanceMinutes(0);
+            }
+            additionalAttendees.add(newAttendee);
+        }
+        return additionalAttendees;
+    }
+
 
     /**
      * This method merges all attendees that have the same ASURITE ID and while merging, it
@@ -66,6 +98,7 @@ public class AttendanceMatcher {
      * @return a merged list
      */
     public List<Attendee> mergeLoadedAttendees(List<Attendee> attendees) {
+
         List<Attendee> mergedAttendees = attendees
                 .stream()
                 .collect(Collectors.toMap(

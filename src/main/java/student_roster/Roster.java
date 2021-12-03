@@ -21,7 +21,7 @@ public class Roster {
     }
 
     public static ArrayList<Student> students;
-    private DefaultTableModel model;
+    public static DefaultTableModel model;
     public JTable table;
     private CSVReader csvReader;
     private final String[] header = {"ID", "First Name", "Last Name", "Program and Plan", "Academic Plan", "ASURITE"};
@@ -40,10 +40,12 @@ public class Roster {
         table = new JTable(model);
         table.setModel(model);
         try {
+            int i = 0;
             while((row = csvReader.readNext()) != null ) {
-                boolean pass = addStudent(row);
+                boolean pass = addStudent(row, i);
                 if ( pass ) {
                     model.addRow(row);
+                    i++;
                 }
             }
         } catch (Exception e) {
@@ -59,8 +61,8 @@ public class Roster {
         JOptionPane.showMessageDialog(ApplicationPage.jFrame, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
-    private boolean addStudent(String[] data) {
-        Student student = new Student(data[0], data[1], data[2], data[3], data[4], data[5]);
+    private boolean addStudent(String[] data, int position) {
+        Student student = new Student(data[0], data[1], data[2], data[3], data[4], data[5], position);
         if (students.stream().anyMatch(s -> s.getAsuriteId().equals(student.getAsuriteId()))) {
             return false;
         }

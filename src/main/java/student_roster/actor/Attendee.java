@@ -36,4 +36,8 @@ public class Attendee extends Student implements Cloneable {
         }
     }
 
+    @Override
+    public String toString() {
+        return  "Attendee: " + this.getAsuriteId() + ", minutes: " + this.getAttendanceMinutes();
+    }
 }

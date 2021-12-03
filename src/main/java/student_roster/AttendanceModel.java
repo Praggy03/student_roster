@@ -8,6 +8,7 @@ import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 import student_roster.actor.Attendee;
 import student_roster.actor.Student;
+import student_roster.attendance.AttendanceMatcher;
 
 import javax.swing.JOptionPane;
 import java.io.*;
@@ -17,10 +18,10 @@ import java.util.List;
 public class AttendanceModel {
 
     public AttendanceModel() {
-        attendies = new ArrayList<Student>();
+        attendies = new ArrayList<>();
     }
 
-    public static ArrayList<Student> attendies;
+    public static List<Attendee> attendies;
     private DefaultTableModel model;
     public JTable table;
     private CSVReader csvReader;
@@ -28,7 +29,8 @@ public class AttendanceModel {
     private List<String[]> rowData;
     private String[] row;
 
-    public JTable loadData(File file) {
+    public List<Attendee> loadData(File file) {
+        List<Attendee> mergedAttendees;
         try {
             csvReader = new CSVReader(new FileReader(file));
         } catch (FileNotFoundException fe) {
@@ -41,28 +43,38 @@ public class AttendanceModel {
         table.setModel(model);
         try {
             while((row = csvReader.readNext()) != null ) {
-                boolean pass = addAttendee(row);
-                if ( pass ) {
-                    model.addRow(row);
-                }
+                addAttendee(row);
             }
+            mergedAttendees = AttendanceMatcher.getAttendanceMatcher().mergeLoadedAttendees(attendies);
+            mergedAttendees = AttendanceMatcher.getAttendanceMatcher().addAdditionalAttendees(mergedAttendees);
+
+//            mergedAttendees.forEach(mergedAttendee -> {
+//                String[] attendeeArr = new String[7];
+//                attendeeArr[0] = mergedAttendee.getId();
+//                attendeeArr[1] = mergedAttendee.getFirstName();
+//                attendeeArr[2] = mergedAttendee.getLastName();
+//                attendeeArr[3] = mergedAttendee.getProgram();
+//                attendeeArr[4] = mergedAttendee.getLevel();
+//                attendeeArr[5] = mergedAttendee.getAsuriteId();
+//                attendeeArr[6] = Integer.toString(mergedAttendee.getAttendanceMinutes());
+//                model.addRow(attendeeArr);
+//            });
         } catch (Exception e) {
             errorDialog("An error occured while processing your CSV", "Fatal!");
             return null;
         }
 
-        System.out.println(table);
-        return table;
+        return mergedAttendees;
     }
 
     public void errorDialog(String message, String title) {
         JOptionPane.showMessageDialog(ApplicationPage.jFrame, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
-    private boolean addAttendee(String[] data) {
-        Attendee attendee = new Attendee(data[0], Integer.parseInt(data[1]));
+    private void addAttendee(String[] data) {
+        Attendee attendee = new Attendee(data[0].replaceAll("[^a-zA-Z0-9]", ""),
+                Integer.parseInt(data[1].replaceAll("[^a-zA-Z0-9]", "")));
         attendies.add(attendee);
-        return true;
     }
 
 }

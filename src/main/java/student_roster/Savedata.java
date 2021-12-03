@@ -34,6 +34,7 @@ public class Savedata {
                     {"Chetan","21","Male"},
                     {"Jaanu","21","Female"}
             };
+
             JTable jTable1 = new JTable(data, columns);
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Specify a save file");

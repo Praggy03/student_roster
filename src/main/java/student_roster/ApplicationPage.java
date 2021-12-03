@@ -15,8 +15,8 @@ public class ApplicationPage {
     private JMenu fileMenu, aboutMenu;
     private JMenuBar menuBar;
     private JMenuItem loadRosterMenuItem, addAttendanceItem, saveItem, plotDataItem, teamInformation;
-    private JTable rosterTable;
-    private JScrollPane tableScrollPane;
+    public static JTable rosterTable;
+    public static JScrollPane tableScrollPane;
     private JPanel tablePanel;
     private JTable attendanceTable;
 
