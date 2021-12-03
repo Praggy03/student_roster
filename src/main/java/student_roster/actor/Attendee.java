@@ -7,10 +7,14 @@ public class Attendee extends Student implements Cloneable {
         super();
     }
 
-    public Attendee(String firstName, String lastName, String asuriteId, int attendanceMinutes) {
-        super();
-        this.firstName = firstName;
-        this.lastName = lastName;
+//    public Attendee(String firstName, String lastName, String asuriteId, int attendanceMinutes) {
+//        super();
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.asuriteId = asuriteId;
+//        this.attendanceMinutes = attendanceMinutes;
+//    }
+    public Attendee(String asuriteId, int attendanceMinutes) {
         this.asuriteId = asuriteId;
         this.attendanceMinutes = attendanceMinutes;
     }

@@ -54,10 +54,11 @@ public class ApplicationPage {
 
         addAttendanceItem = new JMenuItem("Add Attendance");
         fileMenu.add(addAttendanceItem);
-        addAttendanceItem.addActionListener(e->loadAttendance());
+        addAttendanceItem.addActionListener(e->loadattendance.ldattendance());
 
         saveItem = new JMenuItem("Save");
         fileMenu.add(saveItem);
+        saveItem.addActionListener(e->Savedata.initialize());
 
 
         plotDataItem = new JMenuItem("Plot Data");
@@ -87,31 +88,9 @@ public class ApplicationPage {
             jFrame.setSize(0,0);
             jFrame.setSize(1440,1080);
             rosterTable.setVisible(true);
-
         }
     }
 
-    private void loadAttendance() {
-
-        //DatePicker
-
-
-
-
-//        Loading the CSV File
-        JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV files (*.csv)", "csv");
-        chooser.setFileFilter(fileFilter);
-        chooser.setMultiSelectionEnabled(false);
-        int approved = chooser.showOpenDialog(jFrame);
-        if ( approved == JFileChooser.APPROVE_OPTION ) {
-            File attendancefile = chooser.getSelectedFile();
-            AttendanceModel am = new AttendanceModel();
-            attendanceTable = am.loadData(attendancefile);
-            jFrame.add(table.getTableHeader(), BorderLayout.PAGE_START);
-            jFrame.add(table, BorderLayout.CENTER);
-        }
-    }
 
     private void displayAbout() {
         JOptionPane.showMessageDialog(jFrame, "Abhinav Venepally \n Jasvith \n Pooja Kulkarni \n Pragadeeshkumar Rajavel ","About Team" ,JOptionPane.PLAIN_MESSAGE);

@@ -9,6 +9,7 @@ repositories {
 dependencies {
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.2'
     implementation group: 'org.jfree', name: 'jfreechart', version: '1.5.0'
+    implementation group: 'com.toedter', name: 'jcalendar', version: '1.4'
 }
 
 apply plugin: 'application'
